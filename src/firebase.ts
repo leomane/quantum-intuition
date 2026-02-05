@@ -23,12 +23,12 @@ import { getFirestore } from 'firebase/firestore';
 // ⚠️  REPLACE THESE VALUES with your Firebase project config
 // ---------------------------------------------------------------------------
 const firebaseConfig = {
-  apiKey:                 'YOUR_API_KEY',
-  authDomain:             'YOUR_PROJECT.firebaseapp.com',
-  projectId:              'YOUR_PROJECT_ID',
-  storageBucket:          'YOUR_PROJECT.firebasestorage.app',
-  messagingSenderId:      'YOUR_SENDER_ID',
-  appId:                  'YOUR_APP_ID',
+  apiKey:                 'AIzaSyDiUVNtlNwUkrr7kMvZFbB5Ck8G_riIWOQ',
+  authDomain:             'quantum-intuition.firebaseapp.com',
+  projectId:              'quantum-intuition',
+  storageBucket:          'quantum-intuition.firebasestorage.app',
+  messagingSenderId:      '685977627423',
+  appId:                  '1:685977627423:web:9c429f3029ed80a2625e2a',
 };
 
 // ---------------------------------------------------------------------------

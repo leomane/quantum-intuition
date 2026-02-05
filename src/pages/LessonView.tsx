@@ -1,13 +1,11 @@
 /**
  * Lesson View Page
  *
- * Displays a single lesson with content, simulation, and exploration.
- * Currently renders the Laplace's Demon simulation with a timeline
- * scrubber that lets the user rewind and release to resume —
- * demonstrating classical determinism.
+ * Routes to the appropriate lesson component based on lessonId.
+ * Each lesson is lazy-loaded for code splitting.
  */
 
-import { type Component, createSignal, Show } from 'solid-js';
+import { type Component, createSignal, Show, lazy, Suspense, Switch, Match } from 'solid-js';
 import { useParams, A } from '@solidjs/router';
 import { Canvas2D, PALETTE } from '../simulations/shared';
 import { ControlsPanel, Slider, Toggle, PlaybackControls } from '../simulations/shared/Controls';
@@ -15,6 +13,9 @@ import { TimelineScrubber } from '../simulations/shared/TimelineScrubber';
 import { markLessonComplete, progressState } from '../stores/progress';
 import type p5 from 'p5';
 import './LessonView.css';
+
+// Lazy-loaded lesson components
+const MaxwellTriumphLesson = lazy(() => import('../lessons/maxwell-triumph'));
 
 // ============================================================================
 // Types & constants
@@ -190,10 +191,10 @@ const LessonView: Component = () => {
   };
 
   // --------------------------------------------------------------------------
-  // Render
+  // Render — Laplace's Demon (inline)
   // --------------------------------------------------------------------------
 
-  return (
+  const LaplaceDemonContent = () => (
     <div class="lesson-view">
       <header class="lesson-header">
         <A href="/" class="back-link">
@@ -313,11 +314,11 @@ const LessonView: Component = () => {
 
           <div class="lesson-complete-wrap">
             <Show
-              when={progressState.completedLessons[params.lessonId]}
+              when={progressState.completedLessons['laplace-demon']}
               fallback={
                 <button
                   class="btn-complete"
-                  onClick={() => markLessonComplete(params.lessonId)}
+                  onClick={() => markLessonComplete('laplace-demon')}
                 >
                   Mark as Complete
                 </button>
@@ -333,6 +334,23 @@ const LessonView: Component = () => {
         </section>
       </div>
     </div>
+  );
+
+  // --------------------------------------------------------------------------
+  // Route to appropriate lesson
+  // --------------------------------------------------------------------------
+
+  return (
+    <Suspense fallback={<div class="lesson-loading">Loading lesson...</div>}>
+      <Switch fallback={<LaplaceDemonContent />}>
+        <Match when={params.lessonId === 'maxwell-triumph'}>
+          <MaxwellTriumphLesson />
+        </Match>
+        <Match when={params.lessonId === 'laplace-demon'}>
+          <LaplaceDemonContent />
+        </Match>
+      </Switch>
+    </Suspense>
   );
 };
 

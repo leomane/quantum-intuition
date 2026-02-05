@@ -1,0 +1,1121 @@
+/**
+ * Maxwell's Triumph Simulation Styles
+ * Multi-stage progressive simulation
+ */
+
+.maxwell-simulation {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Stage tabs */
+.stage-tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  background: var(--bg-elevated);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.stage-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.stage-tab:hover {
+  background: var(--bg-card);
+}
+
+.stage-tab.active {
+  background: var(--teal);
+  color: var(--bg);
+}
+
+.stage-tab.active .stage-number {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--bg);
+}
+
+.stage-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.stage-title {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stage-tab.active .stage-title {
+  color: var(--bg);
+}
+
+/* Stage description */
+.stage-description {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0 0.25rem;
+}
+
+/* Simulation layout */
+.simulation-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.simulation-canvas-wrap {
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.simulation-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 280px;
+  max-width: 320px;
+}
+
+/* Stage navigation */
+.stage-navigation {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.stage-navigation .control-button {
+  flex: 1;
+}
+
+/* Wavelength range labels */
+.wavelength-range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  padding: 0 0.25rem;
+}
+
+/* Wave info display */
+.wave-info {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg-elevated);
+  border-radius: 6px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.info-label {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.info-value {
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+}
+
+.color-swatch {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+/* Maxwell's Insight section */
+.insight-box {
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-left: 3px solid var(--accent);
+}
+
+.insight-text {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin: 0 0 0.5rem 0;
+}
+
+.insight-text:last-child {
+  margin-bottom: 0;
+}
+
+.insight-text em {
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-style: normal;
+}
+
+.insight-list {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.insight-list li {
+  margin-bottom: 0.25rem;
+}
+
+.insight-list strong {
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+}
+
+.constant-sliders {
+  margin-bottom: 0.5rem;
+}
+
+.constant-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-align: right;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Speed comparison panel */
+.speed-comparison {
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border: 1px solid var(--border);
+}
+
+.speed-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.speed-row.reality {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.speed-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.speed-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+}
+
+.speed-row.reality .speed-value {
+  color: var(--success);
+}
+
+.speed-row.calculated .speed-value {
+  color: var(--accent);
+}
+
+.speed-difference {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--coral);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+}
+
+/* Notation guide */
+.notation-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notation-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.notation-symbol {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  width: 1.5rem;
+  text-align: center;
+  color: var(--text);
+}
+
+.notation-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.3;
+}
+
+/* ============================================
+   Stage 2: Coupling Legend
+   ============================================ */
+
+.coupling-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.legend-section {
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+}
+
+.legend-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.legend-symbol {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  width: 1.25rem;
+  text-align: center;
+}
+
+.legend-symbol.e-field {
+  color: var(--teal);
+}
+
+.legend-symbol.b-field {
+  color: var(--coral);
+}
+
+.legend-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.legend-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.b-direction-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+}
+
+.direction-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.direction-icon {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--coral);
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Dot in center = coming out of screen */
+.direction-icon.out-of-screen::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background: var(--coral);
+  border-radius: 50%;
+}
+
+/* X = going into screen */
+.direction-icon.into-screen::before,
+.direction-icon.into-screen::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 2px;
+  background: var(--coral);
+}
+
+.direction-icon.into-screen::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.direction-icon.into-screen::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.direction-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.legend-insight {
+  background: var(--bg-card);
+  border-left: 2px solid var(--accent);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.legend-insight p {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.coupling-playback {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border);
+}
+
+.coupling-playback button {
+  width: 100%;
+}
+
+/* ============================================
+   Stage 3: Discoveries Controls
+   ============================================ */
+
+.discovery-control {
+  margin-bottom: 0.5rem;
+}
+
+.current-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.current-toggle:hover {
+  background: var(--bg-elevated);
+  border-color: var(--text-muted);
+}
+
+.current-toggle.active {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.toggle-indicator {
+  width: 40px;
+  height: 22px;
+  background: var(--bg-elevated);
+  border-radius: 11px;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.toggle-indicator::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.current-toggle.active .toggle-indicator {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.current-toggle.active .toggle-indicator::after {
+  transform: translateX(18px);
+  background: var(--bg);
+}
+
+.toggle-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.current-toggle.active .toggle-label {
+  color: var(--bg);
+}
+
+.control-hint {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin: 0.5rem 0 0 0;
+}
+
+.control-hint.emphasis {
+  color: var(--text);
+  margin-top: 0.75rem;
+}
+
+.control-hint.relationship {
+  background: var(--bg-elevated);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  border-left: 2px solid var(--teal);
+  margin-top: 0.75rem;
+}
+
+.control-hint.relationship strong {
+  color: var(--teal);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.control-hint em {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* Discovery Insight Box */
+.discovery-insight {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.discovery-insight h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 0 0 0.5rem 0;
+}
+
+.discovery-insight p {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin: 0.5rem 0;
+}
+
+.discovery-insight ul {
+  margin: 0.5rem 0;
+  padding-left: 1rem;
+}
+
+.discovery-insight li {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 0.25rem;
+}
+
+.discovery-insight li strong {
+  color: var(--text);
+}
+
+.discovery-insight em {
+  color: var(--teal);
+  font-style: normal;
+}
+
+/* ============================================
+   Stage 4: Properties of Space
+   ============================================ */
+
+.space-properties-intro {
+  margin-bottom: 0.75rem;
+}
+
+.property-section {
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.property-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.property-symbol {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.property-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.property-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin: 0 0 0.5rem 0;
+}
+
+.property-value-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.property-value-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.property-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.maxwell-equation-box {
+  background: var(--bg-elevated);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 0.75rem;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.equation {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+}
+
+.equation-meaning {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.frequency-effect {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+  font-family: 'Space Mono', monospace;
+}
+
+/* ============================================
+   Stage 1: Explanatory Legend
+   ============================================ */
+
+.stage1-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.legend-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.legend-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.legend-text {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.stage1-hint {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border);
+}
+
+/* ============================================
+   Stage 3: Compact Experiments Layout
+   ============================================ */
+
+.experiments-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.experiment-box {
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.experiment-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.experiment-hint {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.current-toggle.compact {
+  padding: 0.5rem 0.6rem;
+  gap: 0.5rem;
+}
+
+.current-toggle.compact .toggle-indicator {
+  width: 32px;
+  height: 18px;
+  border-radius: 9px;
+}
+
+.current-toggle.compact .toggle-indicator::after {
+  width: 12px;
+  height: 12px;
+  top: 3px;
+  left: 3px;
+}
+
+.current-toggle.compact.active .toggle-indicator::after {
+  transform: translateX(14px);
+}
+
+.current-toggle.compact .toggle-label {
+  font-size: 0.8rem;
+}
+
+/* Compact relationships display */
+.relationships-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.relationship-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-elevated);
+  border-radius: 4px;
+}
+
+.relationship-cause {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--teal);
+  font-weight: 500;
+}
+
+.relationship-arrow {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.relationship-effect {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--coral);
+  font-weight: 500;
+}
+
+.unification-note {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.unification-note em {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* ============================================
+   Stage 4: Compact Properties Layout
+   ============================================ */
+
+.wavelength-control-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.wavelength-readout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.wavelength-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.wavelength-region {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: var(--text);
+}
+
+.properties-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.property-compact {
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.property-header-compact {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.property-name-compact {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.property-value-compact {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.equation-inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.equation-formula {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.equation-result {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.speed-delta {
+  font-size: 0.75rem;
+  color: var(--coral);
+  text-align: center;
+  padding: 0.4rem;
+  background: var(--bg-elevated);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive layout */
+@media (max-width: 960px) {
+  .simulation-layout {
+    flex-direction: column;
+  }
+
+  .simulation-controls {
+    width: 100%;
+    max-width: none;
+  }
+
+  .stage-tabs {
+    flex-wrap: wrap;
+  }
+
+  .stage-tab {
+    flex: 1 1 45%;
+  }
+
+  .stage-title {
+    display: none;
+  }
+
+  /* Grid layouts can stay as-is on tablets */
+  .experiments-grid,
+  .properties-grid {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .stage-tab {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .stage-title {
+    display: inline;
+  }
+
+  /* Stack grids on mobile */
+  .experiments-grid,
+  .properties-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   Stage 4: Definitions Panel (above canvas)
+   ============================================ */
+
+.definitions-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.definition-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.def-symbol {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.def-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.def-desc {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* ============================================
+   Stage 4: Mode Toggle
+   ============================================ */
+
+.mode-toggle-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.mode-toggle {
+  flex: 1;
+  padding: 0.5rem 0.6rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.mode-toggle:hover {
+  background: var(--bg-elevated);
+  border-color: var(--text-muted);
+}
+
+.mode-toggle.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+/* ============================================
+   Stage 4: Impedance Display
+   ============================================ */
+
+.impedance-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.impedance-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.impedance-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+/* ============================================
+   Stage 4: Locked Equation State
+   ============================================ */
+
+.equation-inline.locked {
+  border-color: var(--success);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.equation-inline.locked .equation-formula {
+  color: var(--success);
+}
+
+.equation-inline.locked .equation-result {
+  color: var(--success);
+}
+
+/* Responsive adjustments for definitions panel */
+@media (max-width: 700px) {
+  .definitions-panel {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .definition-item {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .def-symbol {
+    min-width: 2rem;
+  }
+
+  .def-name {
+    min-width: 6rem;
+  }
+}

@@ -1,0 +1,13 @@
+/**
+ * Maxwell's Triumph — Lesson Styles
+ *
+ * Imports base lesson styles and adds Maxwell-specific customizations.
+ */
+
+/* Import base lesson view styles */
+@import '../../pages/LessonView.css';
+
+/* Maxwell-specific: Key insights positioned below simulation */
+.simulation-section .key-insights {
+  margin-top: var(--space-xl);
+}

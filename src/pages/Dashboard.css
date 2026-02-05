@@ -1,0 +1,208 @@
+/* ==========================================================================
+   Dashboard Styles
+   ========================================================================== */
+
+.dashboard {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Header */
+.dashboard-header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.dashboard-header h1 {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-sm);
+}
+
+.dashboard-subtitle {
+  font-size: var(--text-lg);
+  color: var(--text-dim);
+}
+
+/* Sections */
+.curriculum-overview,
+.quick-start {
+  margin-bottom: var(--space-3xl);
+}
+
+.curriculum-overview h2,
+.quick-start h2 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-sm);
+}
+
+.section-description {
+  color: var(--text-dim);
+  max-width: 600px;
+  margin-bottom: var(--space-xl);
+}
+
+/* Phase Cards */
+.phase-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.phase-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  text-decoration: none;
+  color: var(--text);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.phase-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--phase-color);
+}
+
+.phase-card:hover {
+  border-color: var(--phase-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.phase-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.phase-number {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--phase-color);
+  color: var(--bg);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.phase-progress {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.phase-title {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.phase-subtitle {
+  color: var(--phase-color);
+  font-weight: 400;
+}
+
+.phase-description {
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.phase-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border);
+}
+
+.lessons-count {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.start-link {
+  font-size: var(--text-sm);
+  color: var(--phase-color);
+  font-weight: 500;
+  transition: transform var(--transition-fast);
+}
+
+.phase-card:hover .start-link {
+  transform: translateX(4px);
+}
+
+/* Continue Card */
+.continue-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  text-decoration: none;
+  color: var(--text);
+  transition: all var(--transition-normal);
+}
+
+.continue-card:hover {
+  border-color: var(--accent);
+  background: var(--bg-elevated);
+}
+
+.continue-info {
+  flex: 1;
+}
+
+.continue-phase {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.continue-info h3 {
+  font-size: var(--text-lg);
+  margin: var(--space-xs) 0;
+}
+
+.continue-info p {
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.continue-arrow {
+  font-size: var(--text-2xl);
+  color: var(--accent);
+  transition: transform var(--transition-fast);
+}
+
+.continue-card:hover .continue-arrow {
+  transform: translateX(4px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .phase-cards {
+    grid-template-columns: 1fr;
+  }
+}

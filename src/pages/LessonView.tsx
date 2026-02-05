@@ -156,7 +156,6 @@ const LessonView: Component = () => {
 
   const handleScrubStart = () => {
     scrubbing = true;
-    setPlaying(false);
   };
 
   const handleScrub = (frameIndex: number) => {

@@ -7,11 +7,12 @@
  * demonstrating classical determinism.
  */
 
-import { type Component, createSignal } from 'solid-js';
+import { type Component, createSignal, Show } from 'solid-js';
 import { useParams, A } from '@solidjs/router';
 import { Canvas2D, PALETTE } from '../simulations/shared';
 import { ControlsPanel, Slider, Toggle, PlaybackControls } from '../simulations/shared/Controls';
 import { TimelineScrubber } from '../simulations/shared/TimelineScrubber';
+import { markLessonComplete, progressState } from '../stores/progress';
 import type p5 from 'p5';
 import './LessonView.css';
 
@@ -309,6 +310,23 @@ const LessonView: Component = () => {
             cracks in the clockwork. Next, we'll explore Maxwell's unification
             of light, electricity, and magnetism.
           </p>
+
+          <div class="lesson-complete-wrap">
+            <Show
+              when={progressState.completedLessons[params.lessonId]}
+              fallback={
+                <button
+                  class="btn-complete"
+                  onClick={() => markLessonComplete(params.lessonId)}
+                >
+                  Mark as Complete
+                </button>
+              }
+            >
+              <span class="lesson-completed-badge">✓ Completed</span>
+            </Show>
+          </div>
+
           <A href="/lesson/maxwell-triumph" class="next-lesson-link">
             Next: Maxwell's Triumph →
           </A>

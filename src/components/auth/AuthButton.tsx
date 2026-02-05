@@ -7,7 +7,7 @@
  *   - "Sign in" ghost button when in guest mode
  */
 
-import { type Component, createSignal, Show } from 'solid-js';
+import { type Component, createSignal, createEffect, Show } from 'solid-js';
 import { authState, logout } from '../../stores/auth';
 import './AuthButton.css';
 
@@ -18,6 +18,13 @@ interface AuthButtonProps {
 
 export const AuthButton: Component<AuthButtonProps> = (props) => {
   const [dropdownOpen, setDropdownOpen] = createSignal(false);
+  const [photoFailed, setPhotoFailed] = createSignal(false);
+
+  // Reset photo-error state whenever the signed-in user changes
+  createEffect(() => {
+    void authState.user?.uid;   // track uid so effect re-runs on user switch
+    setPhotoFailed(false);
+  });
 
   // First letter of displayName for the avatar fallback
   const initials = () => {
@@ -40,13 +47,14 @@ export const AuthButton: Component<AuthButtonProps> = (props) => {
           aria-label={`Signed in as ${authState.user?.displayName}. Click for options.`}
         >
           <Show
-            when={authState.user?.photoURL}
+            when={authState.user?.photoURL && !photoFailed()}
             fallback={<span class="auth-initials">{initials()}</span>}
           >
             <img
               class="auth-photo"
               src={authState.user!.photoURL!}
               alt={authState.user!.displayName ?? 'User'}
+              onError={() => setPhotoFailed(true)}
             />
           </Show>
           <span class="auth-name">{authState.user?.displayName?.split(' ')[0]}</span>

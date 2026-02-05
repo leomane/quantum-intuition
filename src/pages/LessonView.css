@@ -171,6 +171,38 @@ blockquote cite {
   padding: var(--space-xl);
 }
 
+/* Complete button / badge */
+.lesson-complete-wrap {
+  margin-bottom: var(--space-lg);
+}
+
+.btn-complete {
+  background: var(--teal);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-complete:hover {
+  background: var(--text);
+  transform: translateY(-1px);
+}
+
+.lesson-completed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--success);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
 .next-lesson-link {
   display: inline-flex;
   align-items: center;

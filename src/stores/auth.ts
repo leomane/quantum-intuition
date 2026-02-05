@@ -22,13 +22,37 @@ import { auth } from '../firebase';
 // Store shape
 // ============================================================================
 
+/**
+ * Plain-object snapshot of a Firebase User.
+ *
+ * Firebase's User is a class with getters — SolidJS's Proxy-based store
+ * cannot observe those.  We extract the fields we need into a plain object
+ * so reactivity works correctly.
+ */
+export interface UserInfo {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+}
+
 export interface AuthState {
-  /** The signed-in Firebase user, or null */
-  user: User | null;
+  /** Plain-object user info, or null */
+  user: UserInfo | null;
   /** True while we're waiting for the initial auth check */
   loading: boolean;
   /** True when the user chose "Continue as Guest" */
   isGuest: boolean;
+}
+
+/** Extract reactive-safe fields from a Firebase User */
+function toUserInfo(u: User): UserInfo {
+  return {
+    uid: u.uid,
+    displayName: u.displayName,
+    email: u.email,
+    photoURL: u.photoURL,
+  };
 }
 
 // ============================================================================
@@ -52,8 +76,8 @@ export const [authState, setAuthState] = createStore<AuthState>({
 export function initAuth() {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // Signed in via Google
-      setAuthState({ user, loading: false, isGuest: false });
+      // Signed in via Google — extract into a plain object so the store can track it
+      setAuthState({ user: toUserInfo(user), loading: false, isGuest: false });
     } else if (!authState.isGuest) {
       // Not signed in and not explicitly in guest mode —
       // treat as guest by default (no login wall).

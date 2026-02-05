@@ -2,29 +2,83 @@
  * Lesson View Page
  *
  * Displays a single lesson with content, simulation, and exploration.
+ * Currently renders the Laplace's Demon simulation with a timeline
+ * scrubber that lets the user rewind and release to resume —
+ * demonstrating classical determinism.
  */
 
 import { type Component, createSignal } from 'solid-js';
 import { useParams, A } from '@solidjs/router';
 import { Canvas2D, PALETTE } from '../simulations/shared';
 import { ControlsPanel, Slider, Toggle, PlaybackControls } from '../simulations/shared/Controls';
+import { TimelineScrubber } from '../simulations/shared/TimelineScrubber';
 import type p5 from 'p5';
 import './LessonView.css';
 
+// ============================================================================
+// Types & constants
+// ============================================================================
+
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+}
+
+type Snapshot = Particle[];
+
+/** Frames of history to buffer (5 seconds at 60 fps) */
+const HISTORY_MAX = 300;
+
+// ============================================================================
+// Component
+// ============================================================================
+
 const LessonView: Component = () => {
   const params = useParams<{ lessonId: string }>();
-
-  // For now, we use the params to log the lesson ID (will be used for content lookup)
   console.log('Loading lesson:', params.lessonId);
 
-  // Simulation state
+  // --------------------------------------------------------------------------
+  // UI state
+  // --------------------------------------------------------------------------
   const [playing, setPlaying] = createSignal(true);
   const [numParticles, setNumParticles] = createSignal(10);
   const [showTrails, setShowTrails] = createSignal(true);
   const [speed, setSpeed] = createSignal(1);
 
-  // Particle state (would normally be in a store/simulation module)
-  let particles: { x: number; y: number; vx: number; vy: number }[] = [];
+  // --------------------------------------------------------------------------
+  // History / rewind state (plain vars shared via closure with p5 draw loop)
+  // --------------------------------------------------------------------------
+  let history: Snapshot[] = [];
+  let currentIndex = 0;
+  let scrubbing = false;
+
+  /** Reactive mirrors for the scrubber UI — updated each frame */
+  const [scrubHistoryLength, setScrubHistoryLength] = createSignal(0);
+  const [scrubCurrentIndex, setScrubCurrentIndex] = createSignal(0);
+
+  // --------------------------------------------------------------------------
+  // Particle helpers
+  // --------------------------------------------------------------------------
+  let particles: Particle[] = [];
+
+  const snapshot = (): Snapshot =>
+    particles.map((p) => ({ x: p.x, y: p.y, vx: p.vx, vy: p.vy }));
+
+  const restoreSnapshot = (snap: Snapshot) => {
+    particles = snap.map((p) => ({ ...p }));
+  };
+
+  const pushHistory = () => {
+    history.push(snapshot());
+    if (history.length > HISTORY_MAX) {
+      history.shift();
+    }
+    currentIndex = history.length - 1;
+    setScrubHistoryLength(history.length);
+    setScrubCurrentIndex(currentIndex);
+  };
 
   const initParticles = (p: p5, count: number) => {
     particles = Array.from({ length: count }, () => ({
@@ -33,7 +87,14 @@ const LessonView: Component = () => {
       vx: p.random(-2, 2),
       vy: p.random(-2, 2),
     }));
+    history = [];
+    currentIndex = 0;
+    pushHistory();
   };
+
+  // --------------------------------------------------------------------------
+  // p5 callbacks
+  // --------------------------------------------------------------------------
 
   const setup = (p: p5) => {
     p.background(...PALETTE.bg);
@@ -41,48 +102,96 @@ const LessonView: Component = () => {
   };
 
   const draw = (p: p5) => {
-    // Semi-transparent background for trails effect
-    if (showTrails()) {
+    // Background — disable trails while scrubbing so each frame is crisp
+    if (showTrails() && !scrubbing) {
       p.background(...PALETTE.bg, 25);
     } else {
       p.background(...PALETTE.bg);
     }
 
-    // Update and draw particles
+    // Physics step — only when playing forward, never while scrubbing
+    if (!scrubbing) {
+      for (const particle of particles) {
+        particle.x += particle.vx * speed();
+        particle.y += particle.vy * speed();
+
+        if (particle.x < 10 || particle.x > p.width - 10) {
+          particle.vx *= -1;
+          particle.x = p.constrain(particle.x, 10, p.width - 10);
+        }
+        if (particle.y < 10 || particle.y > p.height - 10) {
+          particle.vy *= -1;
+          particle.y = p.constrain(particle.y, 10, p.height - 10);
+        }
+      }
+      pushHistory();
+    }
+
+    // Render particles — coral when scrubbing (visual cue: "you're in the past")
     p.noStroke();
-    p.fill(...PALETTE.teal);
+    const c = scrubbing ? PALETTE.coral : PALETTE.teal;
+    p.fill(c[0], c[1], c[2]);
 
     for (const particle of particles) {
-      // Update position
-      particle.x += particle.vx * speed();
-      particle.y += particle.vy * speed();
-
-      // Bounce off walls
-      if (particle.x < 10 || particle.x > p.width - 10) {
-        particle.vx *= -1;
-        particle.x = p.constrain(particle.x, 10, p.width - 10);
-      }
-      if (particle.y < 10 || particle.y > p.height - 10) {
-        particle.vy *= -1;
-        particle.y = p.constrain(particle.y, 10, p.height - 10);
-      }
-
-      // Draw particle
       p.ellipse(particle.x, particle.y, 12, 12);
     }
 
-    // Draw info
+    // HUD
     p.fill(...PALETTE.textDim);
     p.textFont('Space Mono');
     p.textSize(12);
     p.text(`Particles: ${particles.length}`, 15, 25);
-    p.text(`t = ${(p.frameCount * 0.016 * speed()).toFixed(2)}s`, 15, 42);
+
+    if (scrubbing) {
+      p.fill(...PALETTE.coral);
+      p.text('◀ REWOUND — release to resume', 15, 42);
+    } else {
+      p.text(`t = ${(currentIndex / 60).toFixed(2)}s`, 15, 42);
+    }
   };
 
-  const handleReset = () => {
-    // Re-initialize will happen on next setup
-    particles = [];
+  // --------------------------------------------------------------------------
+  // Scrubber callbacks
+  // --------------------------------------------------------------------------
+
+  const handleScrubStart = () => {
+    scrubbing = true;
+    setPlaying(false);
   };
+
+  const handleScrub = (frameIndex: number) => {
+    const clamped = Math.max(0, Math.min(frameIndex, history.length - 1));
+    currentIndex = clamped;
+    setScrubCurrentIndex(clamped);
+    if (history[clamped]) {
+      restoreSnapshot(history[clamped]);
+    }
+  };
+
+  /** Release: truncate future history, resume from this moment */
+  const handleScrubEnd = () => {
+    scrubbing = false;
+    history = history.slice(0, currentIndex + 1);
+    setScrubHistoryLength(history.length);
+    setScrubCurrentIndex(currentIndex);
+    setPlaying(true);
+  };
+
+  // --------------------------------------------------------------------------
+  // Reset
+  // --------------------------------------------------------------------------
+
+  const handleReset = () => {
+    particles = [];
+    history = [];
+    currentIndex = 0;
+    setScrubHistoryLength(0);
+    setScrubCurrentIndex(0);
+  };
+
+  // --------------------------------------------------------------------------
+  // Render
+  // --------------------------------------------------------------------------
 
   return (
     <div class="lesson-view">
@@ -119,23 +228,42 @@ const LessonView: Component = () => {
             velocities, you can predict exactly where they'll be at any future
             time.
           </p>
+          <p>
+            Try it yourself: <strong>drag the timeline below the simulation
+            backwards</strong> to rewind into the past. The particles will turn
+            coral. When you <strong>release</strong>, the simulation resumes
+            forward from exactly that moment — the future is fully determined.
+          </p>
         </section>
 
         <section class="simulation-section">
           <h2>Interactive Simulation</h2>
           <p class="simulation-intro">
-            Observe how particles follow deterministic trajectories. The same
-            initial conditions always produce the same outcome.
+            Particles follow deterministic trajectories. Rewind the timeline,
+            then release — the future replays from any point in time.
           </p>
 
           <div class="simulation-container">
-            <Canvas2D
-              width={600}
-              height={400}
-              setup={setup}
-              draw={draw}
-              paused={!playing()}
-            />
+            <div class="simulation-canvas-wrap">
+              <Canvas2D
+                width={600}
+                height={400}
+                setup={setup}
+                draw={draw}
+                paused={!playing()}
+              />
+
+              <div class="timeline-wrap">
+                <TimelineScrubber
+                  historyLength={scrubHistoryLength()}
+                  maxHistory={HISTORY_MAX}
+                  currentIndex={scrubCurrentIndex()}
+                  onScrubStart={handleScrubStart}
+                  onScrub={handleScrub}
+                  onScrubEnd={handleScrubEnd}
+                />
+              </div>
+            </div>
 
             <aside class="simulation-controls">
               <ControlsPanel title="Controls">
@@ -149,9 +277,7 @@ const LessonView: Component = () => {
                 <Slider
                   label="Number of Particles"
                   value={numParticles()}
-                  onChange={(v) => {
-                    setNumParticles(Math.round(v));
-                  }}
+                  onChange={(v) => setNumParticles(Math.round(v))}
                   min={1}
                   max={50}
                   step={1}
@@ -168,6 +294,7 @@ const LessonView: Component = () => {
                 <h3>Key Insights</h3>
                 <ul>
                   <li>Same initial conditions → same outcome (determinism)</li>
+                  <li>Rewind and release: the future is always the same</li>
                   <li>Chaos is different from true randomness</li>
                   <li>This worldview dominated physics for 200+ years</li>
                 </ul>

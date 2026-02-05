@@ -108,6 +108,17 @@ blockquote cite {
   align-items: start;
 }
 
+.simulation-canvas-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+.timeline-wrap {
+  padding: 0 2px;
+}
+
 .simulation-controls {
   display: flex;
   flex-direction: column;

@@ -1,8 +1,14 @@
 /* @refresh reload */
-import { render } from 'solid-js/web'
-import './index.css'
-import App from './App.tsx'
+import { render } from 'solid-js/web';
+import './index.css';
+import App from './App.tsx';
+import { initAuth } from './stores/auth';
+import { initProgress } from './stores/progress';
 
-const root = document.getElementById('root')
+// Bootstrap auth → then load saved progress
+initAuth();
+initProgress();
 
-render(() => <App />, root!)
+const root = document.getElementById('root');
+
+render(() => <App />, root!);

@@ -1,17 +1,22 @@
 /**
  * Header Component
  *
- * Top navigation bar with breadcrumbs and progress indicator.
+ * Top navigation bar with breadcrumbs, progress indicator, and auth button.
  */
 
-import { type Component } from 'solid-js';
+import { type Component, createSignal } from 'solid-js';
 import { A, useLocation } from '@solidjs/router';
+import { AuthButton } from '../auth/AuthButton';
+import { LoginModal } from '../auth/LoginModal';
+import { getTotalCompleted } from '../../stores/progress';
 import './Header.css';
+
+const TOTAL_LESSONS = 24;
 
 export const Header: Component = () => {
   const location = useLocation();
+  const [showLoginModal, setShowLoginModal] = createSignal(false);
 
-  // Simple breadcrumb logic (will be enhanced later)
   const getBreadcrumbs = () => {
     const path = location.pathname;
     if (path === '/') {
@@ -32,6 +37,9 @@ export const Header: Component = () => {
     return [{ label: 'Dashboard', href: '/' }];
   };
 
+  const completedCount = () => getTotalCompleted();
+  const progressPercent = () => (completedCount() / TOTAL_LESSONS) * 100;
+
   return (
     <header class="app-header">
       <nav class="breadcrumbs">
@@ -49,11 +57,16 @@ export const Header: Component = () => {
         <div class="progress-indicator">
           <span class="progress-label">Progress</span>
           <div class="progress-bar">
-            <div class="progress-fill" style={{ width: '15%' }} />
+            <div class="progress-fill" style={{ width: `${progressPercent()}%` }} />
           </div>
-          <span class="progress-text">3/24</span>
+          <span class="progress-text">{completedCount()}/{TOTAL_LESSONS}</span>
         </div>
+
+        <AuthButton onSignInClick={() => setShowLoginModal(true)} />
       </div>
+
+      {/* Login modal — rendered here so it floats above everything */}
+      <LoginModal show={showLoginModal()} onClose={() => setShowLoginModal(false)} />
     </header>
   );
 };

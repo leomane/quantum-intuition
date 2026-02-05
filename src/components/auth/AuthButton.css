@@ -1,0 +1,135 @@
+/* ==========================================================================
+   AuthButton
+   ========================================================================== */
+
+.auth-button-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Spinner while loading */
+.auth-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Signed-in avatar button ---------- */
+.auth-avatar-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 4px 10px 4px 4px;
+  cursor: pointer;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  transition: border-color var(--transition-fast),
+              background var(--transition-fast);
+}
+
+.auth-avatar-btn:hover {
+  border-color: var(--text-muted);
+  background: var(--bg-elevated);
+}
+
+.auth-photo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.auth-initials {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.auth-name {
+  font-weight: 500;
+}
+
+/* ---------- Dropdown ---------- */
+.auth-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 200px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-md);
+  z-index: 200;
+}
+
+.auth-dropdown-name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text);
+  margin: 0 0 2px;
+}
+
+.auth-dropdown-email {
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  margin: 0 0 var(--space-md);
+  word-break: break-all;
+}
+
+.auth-signout-btn {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  padding: var(--space-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.auth-signout-btn:hover {
+  background: var(--bg-elevated);
+  border-color: var(--text-muted);
+}
+
+/* ---------- Guest "Sign in" button ---------- */
+.auth-signin-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.auth-signin-btn:hover {
+  border-color: var(--accent);
+  background: var(--bg-elevated);
+}
